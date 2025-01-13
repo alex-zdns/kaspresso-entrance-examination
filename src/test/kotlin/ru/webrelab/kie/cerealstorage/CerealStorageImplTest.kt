@@ -13,4 +13,11 @@ class CerealStorageImplTest {
             CerealStorageImpl(-4f, 10f)
         }
     }
+
+    @Test
+    fun `should throw if storageCapacity is less than containerCapacity`() {
+        assertThrows(IllegalArgumentException::class.java) {
+            CerealStorageImpl(10f, 5f)
+        }
+    }
 }
