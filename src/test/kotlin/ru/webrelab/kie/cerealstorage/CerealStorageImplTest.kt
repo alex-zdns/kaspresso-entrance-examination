@@ -91,4 +91,16 @@ class CerealStorageImplTest {
         storage.addCereal(Cereal.PEAS, 4f)
         assertEquals(false, storage.removeContainer(Cereal.PEAS), "Контейнер не пуст, его нельзя удалить")
     }
+
+    @Test
+    fun `get amount test`() {
+        val storage = CerealStorageImpl(5f, 15f)
+        assertEquals(0.0f, storage.getAmount(Cereal.PEAS), "Контейнер пуст, крупы нет")
+        storage.addCereal(Cereal.PEAS, 4.0f)
+        assertEquals(4.0f, storage.getAmount(Cereal.PEAS), "В контейнере 4.0f гороха")
+        storage.addCereal(Cereal.RICE, 5.0f)
+        assertEquals(5.0f, storage.getAmount(Cereal.RICE), "В контейнере 5.0f риса")
+        storage.addCereal(Cereal.BULGUR, 7.0f)
+        assertEquals(5.0f, storage.getAmount(Cereal.RICE), "В контейнере 5.0f булгура")
+    }
 }
