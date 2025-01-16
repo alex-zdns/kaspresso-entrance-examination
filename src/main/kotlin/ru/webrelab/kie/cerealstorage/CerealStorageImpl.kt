@@ -5,6 +5,8 @@ class CerealStorageImpl(
     override val storageCapacity: Float
 ) : CerealStorage {
 
+    private val maxCountContainers = (storageCapacity / containerCapacity).toInt()
+
     /**
      * Блок инициализации класса.
      * Выполняется сразу при создании объекта
@@ -21,7 +23,33 @@ class CerealStorageImpl(
     private val storage = mutableMapOf<Cereal, Float>()
 
     override fun addCereal(cereal: Cereal, amount: Float): Float {
-        TODO("Not yet implemented")
+        require(amount >= 0.0f) {
+            "Количество добавляемой крупы не может быть отрицательной"
+        }
+
+        if (storage.containsKey(cereal)) {
+            return addCerealInternal(cereal, amount)
+        }
+
+        check (maxCountContainers > storage.size) {
+            "Хранилище не позволяет разместить ещё один контейнер для новой крупы"
+        }
+
+        return addCerealInternal(cereal, amount)
+    }
+
+    private fun addCerealInternal(cereal: Cereal, amount: Float): Float {
+        val container = storage[cereal] ?: 0.0f
+        val allCerealAmount = container + amount
+
+
+        return if (allCerealAmount <= containerCapacity) {
+            storage[cereal] = allCerealAmount
+            0.0f
+        } else {
+            storage[cereal] = containerCapacity
+            allCerealAmount - containerCapacity
+        }
     }
 
     override fun getCereal(cereal: Cereal, amount: Float): Float {
@@ -41,6 +69,6 @@ class CerealStorageImpl(
     }
 
     override fun toString(): String {
-        TODO("Not yet implemented")
+        return storage.toString()
     }
 }
