@@ -70,12 +70,25 @@ class CerealStorageImplTest {
 
     @Test
     fun `get cereal test`() {
-        assertThrows(IllegalArgumentException::class.java) {
-            val storage = CerealStorageImpl(5f, 10f)
-            assertEquals(0.0f, storage.getCereal(Cereal.PEAS, 4f), FLOAT_DELTA, "В хранилище пусто")
-            storage.getCereal(Cereal.PEAS, 4f)
-            assertEquals(3.0f, storage.getCereal(Cereal.PEAS, 3f), FLOAT_DELTA, "Забрали 3f")
-            assertEquals(1.0f, storage.getCereal(Cereal.PEAS, 2f), FLOAT_DELTA, "Забрали все что было")
-        }
+        val storage = CerealStorageImpl(5f, 10f)
+        assertEquals(0.0f, storage.getCereal(Cereal.PEAS, 4f), FLOAT_DELTA, "В хранилище пусто")
+        storage.addCereal(Cereal.PEAS, 4f)
+        assertEquals(3.0f, storage.getCereal(Cereal.PEAS, 3f), FLOAT_DELTA, "Забрали 3f")
+        assertEquals(1.0f, storage.getCereal(Cereal.PEAS, 2f), FLOAT_DELTA, "Забрали все что было")
+    }
+
+    @Test
+    fun `remove empty container`() {
+        val storage = CerealStorageImpl(5f, 10f)
+        storage.addCereal(Cereal.PEAS, 4f)
+        storage.getCereal(Cereal.PEAS, 4f)
+        assertEquals(true, storage.removeContainer(Cereal.PEAS), "Уничтожили пустой контейнер, должно вернуть true")
+    }
+
+    @Test
+    fun `remove not empty container`() {
+        val storage = CerealStorageImpl(5f, 10f)
+        storage.addCereal(Cereal.PEAS, 4f)
+        assertEquals(false, storage.removeContainer(Cereal.PEAS), "Контейнер не пуст, его нельзя удалить")
     }
 }

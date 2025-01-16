@@ -1,5 +1,6 @@
 package ru.webrelab.kie.cerealstorage
 
+import ru.webrelab.kie.cerealstorage.extensions.deltaEquals
 import kotlin.math.min
 
 class CerealStorageImpl(
@@ -70,7 +71,15 @@ class CerealStorageImpl(
     }
 
     override fun removeContainer(cereal: Cereal): Boolean {
-        TODO("Not yet implemented")
+        if (!storage.containsKey(cereal)) return true
+        val currentCerealWeight = storage[cereal] ?: 0.0f
+
+        return if (currentCerealWeight.deltaEquals(0.0f)) {
+            storage.remove(cereal)
+            true
+        } else {
+            false
+        }
     }
 
     override fun getAmount(cereal: Cereal): Float {
