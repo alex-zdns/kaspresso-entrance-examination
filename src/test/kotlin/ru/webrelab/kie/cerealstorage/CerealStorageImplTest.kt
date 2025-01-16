@@ -101,6 +101,18 @@ class CerealStorageImplTest {
         storage.addCereal(Cereal.RICE, 5.0f)
         assertEquals(5.0f, storage.getAmount(Cereal.RICE), "В контейнере 5.0f риса")
         storage.addCereal(Cereal.BULGUR, 7.0f)
-        assertEquals(5.0f, storage.getAmount(Cereal.RICE), "В контейнере 5.0f булгура")
+        assertEquals(5.0f, storage.getAmount(Cereal.BULGUR), "В контейнере 5.0f булгура")
+    }
+
+    @Test
+    fun `get space test`() {
+        val containerCapacity = 5.0f
+        val storage = CerealStorageImpl(containerCapacity, 10f)
+        assertEquals(containerCapacity, storage.getSpace(Cereal.PEAS), "Контейнер с горохом пуст, доступен весь объем контейнера")
+        storage.addCereal(Cereal.PEAS, 4.0f)
+        assertEquals(1.0f, storage.getSpace(Cereal.PEAS), "В контейнере 4.0f гороха, осталось 1.0f")
+        storage.addCereal(Cereal.RICE, 5.0f)
+        assertEquals(0.0f, storage.getSpace(Cereal.RICE), "Контейнер с рисом полон")
+        assertEquals(0.0f, storage.getSpace(Cereal.BULGUR), "Больше нет места для нового контейнера, булгур некуда положить")
     }
 }

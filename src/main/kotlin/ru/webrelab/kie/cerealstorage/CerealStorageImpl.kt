@@ -34,7 +34,7 @@ class CerealStorageImpl(
             return addCerealInternal(cereal, amount)
         }
 
-        check (maxCountContainers > storage.size) {
+        check (isHasSpaceForNewContainer()) {
             "Хранилище не позволяет разместить ещё один контейнер для новой крупы"
         }
 
@@ -87,10 +87,16 @@ class CerealStorageImpl(
     }
 
     override fun getSpace(cereal: Cereal): Float {
-        TODO("Not yet implemented")
+        if (storage.containsKey(cereal)) {
+            return containerCapacity - (storage[cereal] ?: 0.0f)
+        }
+
+        return if (isHasSpaceForNewContainer()) containerCapacity else 0.0f
     }
 
     override fun toString(): String {
         return storage.toString()
     }
+
+    private fun isHasSpaceForNewContainer() = maxCountContainers > storage.size
 }
