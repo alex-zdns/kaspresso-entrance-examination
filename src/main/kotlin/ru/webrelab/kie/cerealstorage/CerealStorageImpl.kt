@@ -1,5 +1,7 @@
 package ru.webrelab.kie.cerealstorage
 
+import kotlin.math.min
+
 class CerealStorageImpl(
     override val containerCapacity: Float,
     override val storageCapacity: Float
@@ -53,7 +55,18 @@ class CerealStorageImpl(
     }
 
     override fun getCereal(cereal: Cereal, amount: Float): Float {
-        TODO("Not yet implemented")
+        require(amount >= 0.0f) {
+            "Количество вынимаемой крупы не может быть отрицательной"
+        }
+
+        if (!storage.containsKey(cereal)) {
+            return 0.0f
+        }
+
+        val currentCerealWeight = storage[cereal] ?: 0.0f
+        val cerealWeight = min(currentCerealWeight, amount)
+        storage[cereal] = currentCerealWeight - cerealWeight
+        return cerealWeight
     }
 
     override fun removeContainer(cereal: Cereal): Boolean {
