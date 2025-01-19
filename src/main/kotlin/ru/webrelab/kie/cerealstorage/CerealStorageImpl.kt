@@ -34,7 +34,7 @@ class CerealStorageImpl(
             return addCerealInternal(cereal, amount)
         }
 
-        check (isHasSpaceForNewContainer()) {
+        check (hasSpaceForNewContainer()) {
             "Хранилище не позволяет разместить ещё один контейнер для новой крупы"
         }
 
@@ -91,7 +91,7 @@ class CerealStorageImpl(
             return containerCapacity - (storage[cereal] ?: 0.0f)
         }
 
-        return if (isHasSpaceForNewContainer()) containerCapacity else 0.0f
+        return if (hasSpaceForNewContainer()) containerCapacity else 0.0f
     }
 
     override fun toString(): String {
@@ -106,6 +106,6 @@ class CerealStorageImpl(
         return sb.toString()
     }
 
-    private fun isHasSpaceForNewContainer() = maxCountContainers > storage.size
+    private fun hasSpaceForNewContainer() = maxCountContainers > storage.size
 }
 
