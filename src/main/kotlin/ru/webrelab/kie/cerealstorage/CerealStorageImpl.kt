@@ -95,8 +95,17 @@ class CerealStorageImpl(
     }
 
     override fun toString(): String {
-        return storage.toString()
+        if (storage.isEmpty()) return "В хранилище нет контейнеров"
+        val sb = StringBuilder()
+        sb.append("[Состав хранилища:")
+
+        storage.forEach { (cereal, value) ->
+            sb.append(" ${cereal.local} - ${"%.2f".format(value)},")
+        }
+        sb.replace(sb.length - 1, sb.length, "]")
+        return sb.toString()
     }
 
     private fun isHasSpaceForNewContainer() = maxCountContainers > storage.size
 }
+

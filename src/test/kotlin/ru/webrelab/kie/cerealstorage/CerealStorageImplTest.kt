@@ -9,8 +9,6 @@ class CerealStorageImplTest {
         private const val FLOAT_DELTA = 0.01f
     }
 
-    //private val storage = CerealStorageImpl(10f, 20f)
-
     @Test
     fun `should throw if containerCapacity is negative`() {
         assertThrows(IllegalArgumentException::class.java) {
@@ -57,7 +55,6 @@ class CerealStorageImplTest {
         assertEquals(0.0f, storage.addCereal(Cereal.PEAS, 4f), FLOAT_DELTA, "Должно остаться еще 1f")
         assertEquals(2.0f, storage.addCereal(Cereal.PEAS, 3f), FLOAT_DELTA, "Заполнен полностью, не смогли положить 2f")
     }
-
 
     @Test
     fun `should throw if amount in getCereal is negative`() {
@@ -108,11 +105,37 @@ class CerealStorageImplTest {
     fun `get space test`() {
         val containerCapacity = 5.0f
         val storage = CerealStorageImpl(containerCapacity, 10f)
-        assertEquals(containerCapacity, storage.getSpace(Cereal.PEAS), "Контейнер с горохом пуст, доступен весь объем контейнера")
+        assertEquals(
+            containerCapacity,
+            storage.getSpace(Cereal.PEAS),
+            "Контейнер с горохом пуст, доступен весь объем контейнера"
+        )
         storage.addCereal(Cereal.PEAS, 4.0f)
         assertEquals(1.0f, storage.getSpace(Cereal.PEAS), "В контейнере 4.0f гороха, осталось 1.0f")
         storage.addCereal(Cereal.RICE, 5.0f)
         assertEquals(0.0f, storage.getSpace(Cereal.RICE), "Контейнер с рисом полон")
-        assertEquals(0.0f, storage.getSpace(Cereal.BULGUR), "Больше нет места для нового контейнера, булгур некуда положить")
+        assertEquals(
+            0.0f,
+            storage.getSpace(Cereal.BULGUR),
+            "Больше нет места для нового контейнера, булгур некуда положить"
+        )
+    }
+
+    @Test
+    fun `empty toString test`() {
+        val storage = CerealStorageImpl(5.0f, 10f)
+        val emptyMessage = "В хранилище нет контейнеров"
+        assertEquals(emptyMessage, storage.toString(), "Должно быть: \"$emptyMessage\"")
+    }
+
+    @Test
+    fun `not empty toString test`() {
+        val storage = CerealStorageImpl(5f, 15f)
+        val message = "[Состав хранилища: Горох - 4,00, Рис - 5,00, Булгур - 0,00]"
+        storage.addCereal(Cereal.PEAS, 4.0f)
+        storage.addCereal(Cereal.RICE, 5.0f)
+        storage.addCereal(Cereal.BULGUR, 2.0f)
+        storage.getCereal(Cereal.BULGUR, 2.0f)
+        assertEquals(message, storage.toString(), "Должно быть: \"$message\"")
     }
 }
